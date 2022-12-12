@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="ERROR">
+	<Appenders>
+		<Console name="console" target="SYSTEM_OUT">
+			<PatternLayout
+				pattern="%d{yy-MM-dd HH:mm:ss.SSS} [%t] %level - %m%n" />
+		</Console>
+		<Console name="console-infolog" target="SYSTEM_OUT">
+			<PatternLayout
+				pattern="%d{HH:mm:ss.SSS} [%t] %level - %m%n" />
+		</Console>
+		<RollingFile name="rolling_error"
+			fileName="./logs/error.log"
+			filePattern="./logs/error-%d{yyyy-MM-dd}.log-%i">
+			<PatternLayout
+				pattern="[%-5p] %d{yy-MM-dd HH:mm:ss} [%C{2}][%M][%L] - %m%n" />
+			<Policies>
+				<Policies>
+					<SizeBasedTriggeringPolicy size="10000KB" />
+				</Policies>
+			</Policies>
+		</RollingFile>
+	</Appenders>
+	<!-- 
+	<로그레벨 종류> 
+	TRACE > DEBUG > INFO > WARN > ERROR > FATAL 순 입니다.
+	
+	 << Log Level >>
+	- TRACE : log4j1.2.12에서 신규 추가된 레벨으로서. 디버그 레벨이 너무 광범위한 것을 해결하기 위해서 좀더 상세한 상태를 나타냄.
+	- DEBUG : 개발시 디버그 용도로 사용한 메시지를 나타냄.
+	- INFO :  로그인, 상태변경과 같은 정보성 메시지를 나타냄.
+	- WARN :  처리 가능한 문제이지만, 향후 시스템 에러의 원인이 될 수 있는 경고성 메시지를 나타냄. 
+	- ERROR :  요청을 처리하는중 문제가 발생한 상태를 나타냄.
+	- FATAL :  아주 심각한 에러가 발생한 상태를 나타냄. 시스템적으로 심각한 문제가 발생해서 어플리케이션 작동이 불가능할 경우가 해당하는데, 일반적으로는 어플리케이션에서는 사용할 일이 없음.
+	   
+	다만 이때 Logger의 setLevel에서 지정된 로그레벨이 있다면 지정된 로그레벨 이하의 로깅이벤트는 무시된다.
+	
+	ex) logger.setLevel(Level.INFO);
+	코드내에 위처럼 지정되어 있다면, 다음의 세 코드 중
+	
+	logger.debug("debug 로그");
+	logger.info("info 로그");
+	logger.warn("warning 로그");
+	
+	debug 로그는 남지 않고 info 와 warn 로그만 남는다.
+	 -->	
+	<loggers>
+		<Root level="INFO" additivity="false">
+			<AppenderRef ref="console" />
+		</Root>
+		<!-- log4j2 -->
+		<logger name="log4jdbc.log4j2" level="INFO" additivity="false">
+			<appender-ref ref="console" />
+		</logger>
+		<!-- QUERY LOG -->
+		<logger name="jdbc.sqlonly" additivity="false" level="INFO">
+			<appender-ref ref="console" />
+		</logger>
+		<!-- RESULTSET TABLE -->
+		<logger name="jdbc.resultsettable" additivity="off" level="INFO">
+			<appender-ref ref="console" />
+		</logger>
+		<!-- query + time -->
+		<logger name="jdbc.sqltiming" level="INFO" />
+		<!-- 전체 로그 ( 양 상당히 많아짐 ) -->
+		<logger name="jdbc.audit" level="INFO" />
+		<!-- resultsettable + resultset (parameter) -->
+		<logger name="jdbc.resultset" level="INFO" />
+		<!-- connection log -->
+		<logger name="jdbc.connection" level="INFO" />
+		<logger name="kr.human" level="INFO" additivity="false">
+			<AppenderRef ref="console" />
+		</logger>
+	</loggers>
+</Configuration>
